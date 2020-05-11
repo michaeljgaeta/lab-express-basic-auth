@@ -7,15 +7,20 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const sassMiddleware = require("node-sass-middleware");
 const serveFavicon = require("serve-favicon");
+
 const indexRouter = require("./routes/index");
 const authenticationRouter = require("./routes/authentication");
+
 const session = require("express-session");
+const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
+
 const app = express();
 
 // Setup view engine
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "hbs");
+app.set("models", join(__dirname, "models"));
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -43,6 +48,7 @@ app.use(
   })
 );
 
+//mount routers
 app.use("/", indexRouter);
 app.use("/authentication", authenticationRouter);
 

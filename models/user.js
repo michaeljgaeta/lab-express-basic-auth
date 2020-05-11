@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -11,15 +11,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  passwordHashAndSalr: {
+  passwordHashAndSalt: {
     type: String,
     required: true
   }
 });
 
 // User model goes here
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
-
-
