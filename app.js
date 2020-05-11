@@ -10,9 +10,15 @@ const serveFavicon = require("serve-favicon");
 
 const indexRouter = require("./routes/index");
 const authenticationRouter = require("./routes/authentication");
+const mainRouter = require("./routes/main");
+const privateRouter = require("./routes/private");
 
-const session = require("express-session");
+const deserializeUser = require('./middleware/deserialize-user');
+const bindUserDocumentToResponseLocals = require('./middleware/bind-user-to-response-locals');
+const routeGuard = require('./middleware/route-guard');
+
 const mongoose = require("mongoose");
+const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 
 const app = express();
@@ -37,6 +43,8 @@ app.use(
     sourceMap: true
   })
 );
+
+//Session and Mongodb middleware
 app.use(
   session({
     secret: "basic-auth-secret",
@@ -48,9 +56,16 @@ app.use(
   })
 );
 
+//Middleware to avoid protected routes
+app.use(deserializeUser);
+app.use(bindUserDocumentToResponseLocals);
+
+
 //mount routers
 app.use("/", indexRouter);
 app.use("/authentication", authenticationRouter);
+app.use("/main", mainRouter);
+app.use("/private", privateRouter);
 
 // Catch missing routes and forward to error handler
 app.use((req, res, next) => {

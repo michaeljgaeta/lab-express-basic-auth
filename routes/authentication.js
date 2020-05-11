@@ -25,7 +25,8 @@ authenticationRouter.post("/sign-up", (req, res) => {
       });
     })
     .then((user) => {
-      console.log(user);
+      // Serializing the user
+      req.session.userId = user._id;
       res.redirect("/");
     })
     .catch((error) => {
